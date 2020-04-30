@@ -127,12 +127,9 @@ public class JarUtils {
                         targetFile.mkdirs();
                     }
                 } else {//有时候entries没有目录,根据文件路径创建目录
-                    int lastSeparatorIndex = entry.getName().lastIndexOf(File.separator);
-                    if (lastSeparatorIndex > 0) {
-                        targetFile = new File(target, entry.getName().substring(0, lastSeparatorIndex));
-                        if (!targetFile.exists()) {
-                            targetFile.mkdirs();
-                        }
+                    targetFile = new File(target, entry.getName());
+                    if (!targetFile.getParentFile().exists()) {
+                        targetFile.mkdirs();
                     }
                 }
             }
