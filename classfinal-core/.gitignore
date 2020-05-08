@@ -16,7 +16,7 @@
 /target
 /bin
 /JAR
-/ENCRTPY
+/ENCRYPT
 log/*
 log
 /log
@@ -25,4 +25,4 @@ logs
 /logs
 .DS_Store
 dependency-reduced-pom.xml
-
+sunrisechina.dll
