@@ -15,6 +15,9 @@
 /target/
 /target
 /bin
+/JAR
+/ENCRYPT
+/COMPARE
 log/*
 log
 /log
