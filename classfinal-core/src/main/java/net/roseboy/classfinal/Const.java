@@ -26,7 +26,7 @@ public class Const {
 
     //本项目需要打包的代码
     public static final String[] CLASSFINAL_FILES = {"Const.class", "CoreAgent.class", "JarDecryptor.class", "SSJar.class", "SSTransformer.class", 
-            "HexUtil.class", "IoUtils.class", "JarUtils.class", "Log.class", "MD5Utils.class", "StrUtils.class", "SysUtils.class"};
+            "IoUtils.class", "JarUtils.class", "Log.class", "MD5Utils.class", "StrUtils.class", "SysUtils.class"};
 
     //调试模式
     public static boolean DEBUG = false;
