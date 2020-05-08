@@ -129,7 +129,7 @@ public class JarUtils {
                 } else {//有时候entries没有目录,根据文件路径创建目录
                     targetFile = new File(target, entry.getName());
                     if (!targetFile.getParentFile().exists()) {
-                        targetFile.mkdirs();
+                        targetFile.getParentFile().mkdirs();
                     }
                 }
             }

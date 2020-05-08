@@ -1,11 +1,13 @@
 package net.roseboy.classfinal;
 
-
 import net.roseboy.classfinal.util.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.util.Base64;
+
+import com.sunrisechina.SSJar;
 
 /**
  * java class解密
@@ -40,53 +42,37 @@ public class JarDecryptor {
      * 根据名称解密出一个文件
      *
      * @param projectPath 项目所在的路径
-     * @param fileName    文件名
-     * @param password    密码
+     * @param fileName 文件名
      * @return 解密后的字节
      */
-    public byte[] doDecrypt(String projectPath, String fileName, char[] password) {
+    public byte[] doDecrypt(String projectPath, String fileName) {
         long t1 = System.currentTimeMillis();
         File workDir = new File(projectPath);
         byte[] bytes = readEncryptedFile(workDir, fileName);
         if (bytes == null) {
             return null;
         }
-
-        //读取机器码，有机器码，先用机器码解密
-        byte[] codeBytes = readEncryptedFile(workDir, Const.CONFIG_CODE);
-        if (codeBytes != null) {
-            //本机器码和打包的机器码不匹配
-            if (!StrUtils.equal(EncryptUtils.md5(this.code), StrUtils.toChars(codeBytes))) {
-                Log.println("该项目不可在此机器上运行!\n");
-                System.exit(-1);
-            }
-
-            //用机器码解密
-            char[] pass = StrUtils.merger(fileName.toCharArray(), code);
-            bytes = EncryptUtils.de(bytes, pass, Const.ENCRYPT_TYPE);
-        }
-
-        //无密码启动,读取隐藏的密码
-        if (password.length == 1 && password[0] == '#') {
-            password = readPassFromJar(workDir);
-        }
-
-        //密码解密
-        char[] pass = StrUtils.merger(password, fileName.toCharArray());
-        bytes = EncryptUtils.de(bytes, pass, Const.ENCRYPT_TYPE);
-
+        byte[] decrypt_bytes = decrypt(bytes);
         long t2 = System.currentTimeMillis();
         Log.debug("解密: " + fileName + " (" + (t2 - t1) + " ms)");
+        return decrypt_bytes;
+    }
 
-        return bytes;
+    public static byte[] decrypt(byte[] bytes) {
+        String content = Base64.getEncoder().encodeToString(bytes);
+        System.out.println("开始  " + content.length());
+        String result = SSJar.decrypt(content);
+        System.out.println("结束  " + result.length());
+        byte[] result_bytes = Base64.getDecoder().decode(result);
 
+        return result_bytes;
     }
 
     /**
      * 在jar文件或目录中读取文件字节
      *
      * @param workDir jar文件或目录
-     * @param name    文件名
+     * @param name 文件名
      * @return 文件字节数组
      */
     public static byte[] readEncryptedFile(File workDir, String name) {
@@ -114,7 +100,7 @@ public class JarDecryptor {
         byte[] passbyte = readEncryptedFile(workDir, Const.CONFIG_PASS);
         if (passbyte != null) {
             char[] pass = StrUtils.toChars(passbyte);
-            return EncryptUtils.md5(pass);
+            return MD5Utils.md5(pass);
         }
         return null;
     }
@@ -123,7 +109,7 @@ public class JarDecryptor {
      * 解密配置文件，spring读取文件时调用
      *
      * @param path 配置文件路径
-     * @param in   输入流
+     * @param in 输入流
      * @return 解密的输入流
      */
     public InputStream decryptConfigFile(String path, InputStream in, char[] pass) {
@@ -141,7 +127,7 @@ public class JarDecryptor {
 
         }
         if (bytes == null || bytes.length == 0) {//需要解密
-            bytes = this.doDecrypt(projectPath, path, pass);
+            bytes = this.doDecrypt(projectPath, path);
         }
         if (bytes == null) {
             return in;

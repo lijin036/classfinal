@@ -174,9 +174,9 @@ public class SysUtils {
      * @return 机器码
      */
     public static char[] makeMarchinCode() {
-        char[] c1 = EncryptUtils.md5(getMacList().toString().toCharArray());
-        char[] c2 = EncryptUtils.md5(getCPUSerialNumber().toCharArray());
-        char[] c3 = EncryptUtils.md5(getHardDiskSerialNumber().toCharArray());
+        char[] c1 = MD5Utils.md5(getMacList().toString().toCharArray());
+        char[] c2 = MD5Utils.md5(getCPUSerialNumber().toCharArray());
+        char[] c3 = MD5Utils.md5(getHardDiskSerialNumber().toCharArray());
         char[] chars = StrUtils.merger(c1, c2, c3);
         for (int i = 0; i < chars.length; i++) {
             chars[i] = Character.toUpperCase(chars[i]);
