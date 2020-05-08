@@ -4,6 +4,7 @@ public class SSJar {
 
     static {
         try {
+            System.out.println(System.getProperty("java.library.path"));
             System.loadLibrary("sunrisechina");
         } catch (Exception e) {
             e.printStackTrace();

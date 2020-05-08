@@ -28,17 +28,12 @@ public class SSTransformer implements ClassFileTransformer {
             return classBuffer;
         }
         className = className.replace("/", ".").replace("\\", ".");
-        if (className.startsWith("com.sunrisechina")) {
-            System.out.println(className);
-        }
         byte[] bytes = JarDecryptor.getInstance().doDecrypt(projectPath, className);
         //CAFEBABE,表示解密成功
         if (bytes != null) {
-            System.out.println(bytes.length);
             if (bytes[0] == -54 && bytes[1] == -2 && bytes[2] == -70 && bytes[3] == -66) {
-                System.out.println(true);
             } else {
-                System.out.println(false);
+                System.out.println(className);
             }
             return bytes;
         }

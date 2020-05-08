@@ -19,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
 
         Const.pringInfo();
-
+        
         // 输出基础目录
         String basePath = System.getProperty("user.dir");
         System.out.println(basePath);
